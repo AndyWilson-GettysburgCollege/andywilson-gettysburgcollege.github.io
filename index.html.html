@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrew Wilson — Avian Ecologist</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1e3a2f;
+    --forest-mid: #2d5240;
+    --moss: #4a7c59;
+    --sage: #7aab84;
+    --sage-light: #b2d4b8;
+    --parchment: #f5f0e8;
+    --parchment-dark: #ede5d4;
+    --ink: #1a1a16;
+    --ink-mid: #3d3d35;
+    --ink-light: #6b6b5e;
+    --gold: #c9933a;
+    --gold-light: #e8b86d;
+    --white: #fdfcf8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lora', Georgia, serif;
+    background: var(--parchment);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  header {
+    background: var(--forest);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 64px;
+  }
+  .site-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--parchment);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .site-name span {
+    color: var(--gold-light);
+    font-style: italic;
+  }
+  nav {
+    display: flex;
+    gap: 0.2rem;
+  }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--sage-light);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.85rem;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: color 0.2s, background 0.2s;
+  }
+  nav button:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  nav button.active { color: var(--gold-light); border-bottom: 2px solid var(--gold); }
+
+  /* ── PAGES ── */
+  .page { display: none; animation: fadeIn 0.4s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── HERO (About) ── */
+  .hero {
+    background: var(--forest);
+    background-image: 
+      radial-gradient(ellipse at 80% 20%, rgba(74,124,89,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 10% 80%, rgba(201,147,58,0.15) 0%, transparent 50%);
+    padding: 5rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234a7c59' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+  }
+  .hero-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+  .hero-text .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1.8rem;
+  }
+  .hero-text p {
+    color: rgba(245,240,232,0.85);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    max-width: 580px;
+    margin-bottom: 1rem;
+  }
+  .hero-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.65rem 1.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--forest);
+    font-weight: 500;
+  }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-outline {
+    background: transparent;
+    color: var(--sage-light);
+    border: 1px solid var(--sage);
+  }
+  .btn-outline:hover { background: rgba(74,124,89,0.2); color: var(--white); }
+  .hero-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 2rem;
+    backdrop-filter: blur(4px);
+  }
+  .hero-card h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1.2rem;
+  }
+  .stat-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--white);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'Lora', serif;
+    font-size: 0.85rem;
+    color: var(--sage-light);
+    font-style: italic;
+  }
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0; }
+
+  /* ── MAIN CONTENT AREA ── */
+  .content-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--forest);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--parchment-dark);
+  }
+
+  /* ── ABOUT BIO ── */
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .bio-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+    color: var(--ink-mid);
+  }
+  .bio-text p:first-child::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    float: left;
+    line-height: 0.8;
+    margin: 0.1em 0.1em 0 0;
+    color: var(--forest);
+  }
+  .info-card {
+    background: var(--forest);
+    border-radius: 6px;
+    padding: 1.8rem;
+    align-self: start;
+  }
+  .info-card h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+  }
+  .info-card p, .info-card a {
+    color: var(--sage-light);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-decoration: none;
+  }
+  .info-card a:hover { color: var(--white); }
+  .info-card hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0; }
+
+  /* ── RESEARCH ── */
+  .research-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .research-card {
+    background: var(--white);
+    border: 1px solid var(--parchment-dark);
+    border-radius: 6px;
+    padding: 1.8rem;
+    border-left: 4px solid var(--moss);
+    transition: border-left-color 0.2s, box-shadow 0.2s;
+  }
+  .research-card:hover {
+    border-left-color: var(--gold);
+    box-shadow: 0 4px 20px rgba(30,58,47,0.1);
+  }
+  .research-card .rc-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--moss);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .research-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--forest);
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+  .research-card p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--ink-light);
+  }
+  .research-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    border-left-color: var(--gold);
+    background: var(--forest);
+  }
+  .research-card.featured .rc-num { color: var(--gold-light); }
+  .research-card.featured h3 { color: var(--white); font-size: 1.3rem; }
+  .research-card.featured p { color: var(--sage-light); }
+  .research-card.featured .rc-text { display: flex; flex-direction: column; justify-content: center; }
+
+  /* ── PUBLICATIONS ── */
+  .pub-year-group { margin-bottom: 2.5rem; }
+  .pub-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--forest);
+    border-bottom: 1px solid var(--parchment-dark);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  .pub-item {
+    padding: 0.85rem 0 0.85rem 1.2rem;
+    border-left: 2px solid var(--parchment-dark);
+    margin-bottom: 0.5rem;
+    transition: border-left-color 0.2s;
+    font-size: 0.93rem;
+    line-height: 1.65;
+    color: var(--ink-mid);
+  }
+  .pub-item:hover { border-left-color: var(--moss); }
+  .pub-item a { color: var(--moss); text-decoration: none; }
+  .pub-item a:hover { color: var(--gold); text-decoration: underline; }
+  .pub-item em { font-style: italic; }
+  .pub-item .pub-journal {
+    font-style: italic;
+    color: var(--ink-light);
+  }
+  .pub-tag {
+    display: inline-block;
+    background: var(--parchment-dark);
+    color: var(--moss);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+  .pub-tag.student { background: rgba(74,124,89,0.12); }
+
+  /* ── TEACHING ── */
+  .teaching-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2.5rem;
+  }
+  .course-list { list-style: none; }
+  .course-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--parchment-dark);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: var(--ink-mid);
+  }
+  .course-list li:last-child { border-bottom: none; }
+  .course-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--moss);
+    letter-spacing: 0.06em;
+    min-width: 60px;
+  }
+  .mentoring-list { list-style: none; }
+  .mentoring-list li {
+    padding: 0.6rem 0 0.6rem 1rem;
+    border-left: 2px solid var(--parchment-dark);
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--ink-mid);
+    line-height: 1.5;
+    transition: border-left-color 0.2s;
+  }
+  .mentoring-list li:hover { border-left-color: var(--moss); }
+  .mentoring-list li .year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--ink-light);
+  }
+
+  /* ── AWARDS / CV ── */
+  .awards-list { list-style: none; margin-bottom: 3rem; }
+  .awards-list li {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--parchment-dark);
+    align-items: baseline;
+  }
+  .award-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    min-width: 50px;
+  }
+  .award-name {
+    font-size: 0.95rem;
+    color: var(--ink-mid);
+    line-height: 1.5;
+  }
+  .award-name strong {
+    display: block;
+    color: var(--forest);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* ── SERVICE ── */
+  .service-list { list-style: none; }
+  .service-list li {
+    padding: 0.5rem 0 0.5rem 1rem;
+    border-left: 2px solid var(--parchment-dark);
+    margin-bottom: 0.35rem;
+    font-size: 0.92rem;
+    color: var(--ink-mid);
+    line-height: 1.55;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--forest);
+    color: var(--sage-light);
+    text-align: center;
+    padding: 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    margin-top: 4rem;
+    border-top: 3px solid var(--gold);
+  }
+  footer a { color: var(--gold-light); text-decoration: none; }
+
+  /* ── UTILITIES ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .subhead {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--forest);
+    margin: 2rem 0 1rem;
+    font-style: italic;
+  }
+  .orcid-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--moss);
+    text-decoration: none;
+  }
+  .orcid-link:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-card { display: none; }
+    .hero-text h1 { font-size: 2.2rem; }
+    .bio-grid, .research-grid, .teaching-grid, .two-col { grid-template-columns: 1fr; }
+    .research-card.featured { grid-template-columns: 1fr; }
+    nav button { font-size: 0.65rem; padding: 0.4rem 0.55rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="site-name" onclick="showPage('about')">Andrew M. Wilson <span>Ph.D.</span></div>
+    <nav>
+      <button class="active" onclick="showPage('about')">About</button>
+      <button onclick="showPage('research')">Research</button>
+      <button onclick="showPage('publications')">Publications</button>
+      <button onclick="showPage('teaching')">Teaching</button>
+      <button onclick="showPage('awards')">Awards & Service</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════ ABOUT ════════════════════════════════════ -->
+<div id="page-about" class="page active">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="subtitle">Professor &amp; Chair · Environmental Studies · Gettysburg College</div>
+        <h1>Andrew Mark Wilson</h1>
+        <p>Avian ecologist studying the effects of land use and climate change on bird populations, with a specialization in drone-based wildlife survey methods and large-scale biodiversity datasets.</p>
+        <p>Current Chair of the <strong style="color:var(--sage-light)">Third Pennsylvania Bird Atlas</strong> Steering Committee and Chair of the Department of Environmental Studies at Gettysburg College.</p>
+        <div class="hero-links">
+          <a href="https://drive.google.com/file/d/1sGyFfxe8QR6tUGTJdh-BJVIdBTiHVa5O/view?usp=sharing" class="btn btn-gold" target="_blank">Download CV</a>
+          <a href="https://scholar.google.com/citations?user=b9T6BYcAAAAJ&hl=en" class="btn btn-outline" target="_blank">Google Scholar</a>
+          <a href="https://orcid.org/0000-0001-8435-4516" class="btn btn-outline" target="_blank">ORCID</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>Research at a glance</h3>
+        <div class="stat-row">
+          <div class="stat">
+            <span class="stat-num">40+</span>
+            <span class="stat-label">peer-reviewed publications</span>
+          </div>
+          <hr class="divider">
+          <div class="stat">
+            <span class="stat-num">30+</span>
+            <span class="stat-label">years in avian ecology</span>
+          </div>
+          <hr class="divider">
+          <div class="stat">
+            <span class="stat-num">15+</span>
+            <span class="stat-label">honors theses supervised</span>
+          </div>
+          <hr class="divider">
+          <div class="stat">
+            <span class="stat-num">3rd</span>
+            <span class="stat-label">PA Bird Atlas — steering chair</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+    <div class="bio-grid">
+      <div class="bio-text">
+        <p>
+          After graduating with a BSc in Applied Statistics from Sheffield Hallam University (1992), I began my career working for two years in health economics research at the University of York, before joining the <strong>British Trust for Ornithology</strong> in 1994—where I spent a productive decade combining quantitative skills with a lifelong passion for birds and conservation. My work at the BTO focused on the population ecology of farmland birds across the UK, producing foundational studies on lapwing, wader, and grassland bird declines.
+        </p>
+        <p>
+          In 2004 I moved to the US to pursue a PhD in Ecology at Penn State, where my research examined bird population responses to conservation grasslands in Pennsylvania. Concurrent with graduate study, I spent six field seasons contributing to the <strong>Second Pennsylvania Breeding Bird Atlas</strong> and ultimately served as lead editor of the resulting 612-page volume published by Penn State University Press in 2012.
+        </p>
+        <p>
+          Following a postdoctoral fellowship at the US Geological Survey at Patuxent, I joined the faculty at <strong>Gettysburg College</strong> in 2011, where I have built a research program around three themes: the ecology and conservation of bird populations at landscape and regional scales; the development of <strong>drone-based survey methods</strong> for wildlife monitoring; and the analysis of large citizen-science datasets including breeding bird atlases and camera trap networks. I am currently a Professor and Chair of the Department of Environmental Studies, and Chair of the Third Pennsylvania Bird Atlas Steering Committee.
+        </p>
+        <p>
+          A central feature of my work at Gettysburg is deep engagement with undergraduate researchers. More than fifteen students have completed honors theses under my supervision, co-authoring papers published in outlets including <em>The Auk</em>, <em>Drones</em>, and <em>Neotropical Biodiversity</em>.
+        </p>
+      </div>
+      <div>
+        <div class="info-card">
+          <h4>Contact</h4>
+          <p>Department of Environmental Studies<br>
+          Gettysburg College, Box 2455<br>
+          300 N. Washington St.<br>
+          Gettysburg, PA 17325 USA</p>
+          <hr>
+          <p>Tel: (717) 337 6072</p>
+          <p><a href="mailto:awilson@gettysburg.edu">awilson@gettysburg.edu</a></p>
+          <hr>
+          <p style="margin-bottom:0.5rem"><a href="https://orcid.org/0000-0001-8435-4516">ORCID: 0000-0001-8435-4516</a></p>
+          <p><a href="https://scholar.google.com/citations?user=b9T6BYcAAAAJ&hl=en">Google Scholar profile →</a></p>
+        </div>
+
+        <div class="info-card" style="margin-top:1rem; background: var(--forest-mid);">
+          <h4>Education</h4>
+          <p><strong style="color:var(--white)">Ph.D. Ecology</strong><br>Pennsylvania State University, 2009</p>
+          <hr>
+          <p><strong style="color:var(--white)">BSc Applied Statistics</strong> (with honours)<br>Sheffield Hallam University, UK, 1992</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ RESEARCH ════════════════════════════════════ -->
+<div id="page-research" class="page">
+  <div class="content-wrap">
+    <div class="section-label">Ongoing & Recent Work</div>
+    <h2 class="section-title">Research</h2>
+
+    <div class="research-grid">
+
+      <div class="research-card featured">
+        <div class="rc-text">
+          <div class="rc-num">Flagship Initiative</div>
+          <h3>Third Pennsylvania Bird Atlas</h3>
+          <p>As Chair of the Steering Committee, I am leading the planning and execution of the Third Pennsylvania Bird Atlas — a statewide coordinated survey that will document the current distribution and abundance of all breeding and wintering bird species across the Commonwealth. Building on the Second Atlas (2004–2009), the third iteration incorporates eBird-integrated data submission, advanced occupancy modelling, and the largest volunteer coordination effort in Pennsylvania ornithological history.</p>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:center;">
+          <svg viewBox="0 0 200 200" width="160" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="100" cy="100" rx="90" ry="90" fill="none" stroke="rgba(201,147,58,0.3)" stroke-width="1"/>
+            <ellipse cx="100" cy="100" rx="65" ry="65" fill="none" stroke="rgba(201,147,58,0.2)" stroke-width="1"/>
+            <ellipse cx="100" cy="100" rx="40" ry="40" fill="none" stroke="rgba(201,147,58,0.15)" stroke-width="1"/>
+            <!-- stylized bird silhouette -->
+            <path d="M80 95 Q90 80 110 85 Q125 75 135 80 Q120 90 115 88 Q105 95 95 98 Z" fill="rgba(201,147,58,0.6)"/>
+            <path d="M80 95 Q75 105 85 112 Q90 105 95 98 Z" fill="rgba(201,147,58,0.4)"/>
+            <circle cx="112" cy="82" r="2" fill="var(--gold-light)"/>
+            <!-- PA state rough shape hint -->
+            <path d="M45 115 L155 115 L150 135 L50 135 Z" fill="rgba(74,124,89,0.2)" stroke="rgba(74,124,89,0.4)" stroke-width="1"/>
+            <text x="100" y="128" text-anchor="middle" fill="rgba(178,212,184,0.7)" font-size="7" font-family="'DM Mono', monospace">PENNSYLVANIA</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Active Research</div>
+        <h3>Drone-Based Bioacoustic Bird Surveys</h3>
+        <p>My lab has developed and refined methods for estimating songbird abundance using unoccupied aircraft systems (UAS) equipped with passive acoustic recorders. Recent work demonstrates high efficiency compared to traditional point counts, and ongoing projects are optimizing detector placement, flight altitude, and automated species identification to make drone surveys a practical tool for large-scale monitoring.</p>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Active Research</div>
+        <h3>Nocturnal Bird Migration Monitoring</h3>
+        <p>Using a combination of audio recording of flight calls and weather surveillance radar, I am investigating the timing, intensity, and composition of nocturnal bird migration over central Maryland and Pennsylvania. This work addresses fundamental questions about migration phenology and its relationship to weather, season, and broader population trends.</p>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Active Research</div>
+        <h3>Large-Scale Biodiversity Datasets</h3>
+        <p>I contribute to several national-scale collaborative efforts including the SNAPSHOT USA camera trap network (coordinated surveys of US mammal communities since 2019) and continue analyses of breeding bird atlas and eBird datasets to examine how land use, urbanization, and climate change drive changes in bird community composition across the eastern US.</p>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Recent Work</div>
+        <h3>Climate Change &amp; Montane Forest Birds</h3>
+        <p>Collaborative work with students examined the vulnerability of elevation-restricted endemic birds of the Talamancan Montane Forests (Costa Rica and Panama) to climate change, using species distribution modelling to project range losses under future warming scenarios.</p>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Recent Work</div>
+        <h3>Invasive Species &amp; Forest Bird Communities</h3>
+        <p>In collaboration with Penn State researchers, we quantified the regional-scale impacts of hemlock woolly adelgid (<em>Adelges tsugae</em>) invasion on North American forest bird communities, linking hemlock decline detected in remote sensing data to long-term changes in bird occupancy derived from atlas datasets.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ PUBLICATIONS ════════════════════════════════════ -->
+<div id="page-publications" class="page">
+  <div class="content-wrap">
+    <div class="section-label">Peer-Reviewed Articles, Books &amp; Chapters</div>
+    <h2 class="section-title">Publications</h2>
+    <p style="font-size:0.88rem; color:var(--ink-light); margin-bottom:2rem; font-style:italic;">* denotes co-authored with Gettysburg College students &nbsp;|&nbsp; <a href="https://scholar.google.com/citations?user=b9T6BYcAAAAJ&hl=en" style="color:var(--moss);">Full list on Google Scholar →</a></p>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2025</div>
+      <div class="pub-item">Rooney, B. et al. 2025. SNAPSHOT USA 2019–2023: The First Five Years of Data From a Coordinated Camera Trap Survey of the United States. <span class="pub-journal">Global Ecology and Biogeography</span> 34: e13941. <a href="https://doi.org/10.1111/geb.13941" target="_blank">DOI →</a></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2024</div>
+      <div class="pub-item">Kays, R. et al. 2024. Climate, food and humans predict communities of mammals in the United States. <span class="pub-journal">Diversity and Distributions</span> 30: e13900. <a href="https://doi.org/10.1111/ddi.13900" target="_blank">DOI →</a></div>
+      <div class="pub-item">Shamon, H. et al. 2024. SNAPSHOT USA 2021: A third coordinated national camera trap survey of the United States. <span class="pub-journal">Ecology</span>. <a href="https://doi.org/10.1002/ecy.4318" target="_blank">DOI →</a></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2023</div>
+      <div class="pub-item">*Liu, Z., L. Sandoval, L.B. Sherman, and A.M. Wilson. 2023. Vulnerability of Elevation-Restricted Endemic Birds of the Talamancan Montane Forests (Costa Rica and Panama) to Climate Change. <span class="pub-journal">Neotropical Biodiversity</span> 9: 115–127. <span class="pub-tag student">Student co-authors</span></div>
+      <div class="pub-item">*Amaral, M.R., A.M. Wilson, J. Blum, and D.A. Miller. 2023. Quantifying regional-scale impacts of hemlock woolly adelgid invasion on North American forest bird communities. <span class="pub-journal">Biological Invasions</span> 25: 4009–4025. <span class="pub-tag student">Student co-authors</span></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2022</div>
+      <div class="pub-item">Kays, R. et al. 2022. SNAPSHOT USA 2020: A second coordinated national camera trap survey of the United States during the COVID-19 Pandemic. <span class="pub-journal">Ecology</span> 103: e3775.</div>
+      <div class="pub-item">Wilson, A.M. 2022. Nocturnal Bird Migration over Frederick, Maryland, Spring and Fall 2021. <span class="pub-journal">Maryland Birdlife</span> 71(2): 37–61.</div>
+      <div class="pub-item">*Wilson, A.M., D.B. Glass, M.A. Immordino, P.S. Ozoh, L.B. Sherman, and M.D. Somers. 2022. A method for estimating songbird abundance with drones. <span class="pub-journal">Drone Systems and Applications</span> 10(1). <span class="pub-tag student">Student co-authors</span></div>
+      <div class="pub-item">Ankori-Karlinsky, R., et al. 2022. North American Breeding Bird Survey underestimates regional bird richness compared to Breeding Bird Atlases. <span class="pub-journal">Ecosphere</span> 13: e3925.</div>
+      <div class="pub-item">*Wilson, A.M., K.S. Boyle, J.L. Gilmore, C.J. Kiefer, M.F. Walker. 2021. Species-Specific Responses of Bird Song Output in the Presence of Drones. <span class="pub-journal">Drones</span> 6(1). <span class="pub-tag student">Student co-authors</span></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2021</div>
+      <div class="pub-item">Wilson, A.M. 2021. Chapter 5: Analytical Methods, in <em>The Second Atlas of Breeding Birds in West Virginia</em>. Penn State Press.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2019</div>
+      <div class="pub-item">Paton G.D., A.V. Shoffner, A.M. Wilson, S.A. Gagné. 2019. The traits that predict the magnitude and spatial scale of forest bird responses to urbanization intensity. <span class="pub-journal">PLoS ONE</span> 14(7): e0220120.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2018</div>
+      <div class="pub-item">Shoffner, A., A.M. Wilson, W. Tang and S.A. Gagné. 2018. The relative effects of forest amount, forest configuration, and urban matrix quality on forest breeding birds. <span class="pub-journal">Scientific Reports</span> 8: 17140.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2017</div>
+      <div class="pub-item">Wilson, A.M., D.W. Brauning, C. Carey, R.S. Mulvihill. 2017. Spatial Models to Account for Variation in Observer Effort in Bird Atlases. <span class="pub-journal">Ecology and Evolution</span>. DOI: 10.1002/ece3.3201</div>
+      <div class="pub-item">Stauffer, G., A.M. Wilson, M. Brittingham, D.W. Brauning, and D. Miller. 2017. Stewardship responsibility of public and private lands for songbird conservation. <span class="pub-journal">Biological Conservation</span> 213: 185–193.</div>
+      <div class="pub-item">*Wilson, A.M., J. Barr, and M. Zagorski. 2017. The feasibility of counting songbirds using unmanned aerial vehicles. <span class="pub-journal">The Auk</span> 134(2): 350–362. <span class="pub-tag student">Student co-authors</span></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2015–2016</div>
+      <div class="pub-item">Tavernia, B.G. et al. 2015. An Evaluation of Rapid Methods for Monitoring Vegetation Characteristics of Wetland Bird Habitat. <span class="pub-journal">Wetlands Ecology and Management</span> 24: 495–505.</div>
+      <div class="pub-item">Pabian, S.E., A.M. Wilson, S.R. Klinger, and M.C. Brittingham. 2015. Pennsylvania's Conservation Reserve Enhancement Program benefits ring-necked pheasants but not enough to reverse declines. <span class="pub-journal">Journal of Wildlife Management</span>.</div>
+      <div class="pub-item">van der Hoek, Y., A. Wilson, et al. 2015. Regional variability in extinction thresholds for forest birds in the northeastern United States. <span class="pub-journal">Diversity and Distributions</span> 21(6): 686–697.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2012</div>
+      <div class="pub-item">Wilson, A.M., D.W. Brauning and R.S. Mulvihill (eds). 2012. <em>Second Atlas of Breeding Birds in Pennsylvania.</em> Penn State Press, University Park, PA. <span class="pub-tag">Book</span></div>
+      <div class="pub-item">Wilson, A.M., and M. Brittingham. 2012. Initial response of bird populations to conservation grasslands in southern Pennsylvania. <span class="pub-journal">Journal of Soil and Water Conservation</span> 67(1): 59–67.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">Pre-2012 (selected)</div>
+      <div class="pub-item">Wilson, A.M., M. Brittingham, and G. Grove. 2010. Association of wintering raptors with Conservation Reserve Enhancement Program grasslands in Pennsylvania. <span class="pub-journal">Journal of Field Ornithology</span> 81: 361–372.</div>
+      <div class="pub-item">Gillings, S., A.M. Wilson, G.J. Conway, J.A. Vickery, and R.J. Fuller. 2008. Distribution and abundance of birds and their habitats within the lowland farmland of Britain in winter. <span class="pub-journal">Bird Study</span> 55: 8–22.</div>
+      <div class="pub-item">Wilson, A.M., J.A. Vickery, and C. Pendlebury. 2007. Agri-environment schemes as a tool for reversing declining populations of grassland waders. <span class="pub-journal">Biological Conservation</span> 136: 128–135.</div>
+      <div class="pub-item">Wilson, A.M., R.J. Fuller, C. Day, and G. Smith. 2005. Nightingales in scrub habitats in the southern fens of East Anglia, England. <span class="pub-journal">Ibis</span> 147: 498–511.</div>
+      <div class="pub-item">Wilson, A.M., J.A. Vickery, A. Brown, et al. 2005. Changes in the numbers of breeding waders on lowland wet grasslands in England and Wales between 1982 and 2002. <span class="pub-journal">Bird Study</span> 52: 55–69.</div>
+      <div class="pub-item">Wilson, A.M., M. Ausden, and T.P. Milsom. 2004. Changes in breeding wader populations on lowland wet grasslands in England and Wales. <span class="pub-journal">Ibis</span> 146: 32–40.</div>
+      <div class="pub-item">Wilson, A.M., A.C.B. Henderson, and R.J. Fuller. 2002. Status of the Nightingale in Britain at the end of the 20th Century with particular reference to climate change. <span class="pub-journal">Bird Study</span> 49: 193–204.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ TEACHING ════════════════════════════════════ -->
+<div id="page-teaching" class="page">
+  <div class="content-wrap">
+    <div class="section-label">Gettysburg College</div>
+    <h2 class="section-title">Teaching &amp; Mentoring</h2>
+
+    <div class="teaching-grid">
+      <div>
+        <h3 class="subhead">Courses Taught</h3>
+        <ul class="course-list">
+          <li><span class="course-code">ES 121</span> Environmental Issues</li>
+          <li><span class="course-code">ES 196</span> Environmental Science and Society</li>
+          <li><span class="course-code">ES 211</span> Principles of Ecology</li>
+          <li><span class="course-code">ES 230</span> Introduction to Geographic Information Systems</li>
+          <li><span class="course-code">ES 302</span> Wildlife Ecology</li>
+          <li><span class="course-code">ES 304</span> Landscape Ecology</li>
+          <li><span class="course-code">Bio/ES 316</span> Conservation Biology</li>
+          <li><span class="course-code">ES 391</span> Marine Ecology and Conservation</li>
+          <li><span class="course-code">ES 400</span> Environmental Studies Senior Seminar: The Appalachian Environment</li>
+        </ul>
+
+        <h3 class="subhead" style="margin-top:2rem">Graduate Students (other institutions)</h3>
+        <ul class="mentoring-list">
+          <li><span class="year">2023</span> Sarah Fischer, Ph.D. — Charles Darwin University, Australia. External examiner.</li>
+          <li><span class="year">2022</span> B. Rodrigues Do Amaral, M.S. — Penn State. Committee member.</li>
+          <li><span class="year">2021</span> M. Bolcar, M.S. — Hood College. Advisor.</li>
+          <li><span class="year">2018</span> G. Paton, M.S. — UNC Charlotte. Committee member.</li>
+          <li><span class="year">2016</span> A. Shoffner, M.S. — UNC Charlotte. Committee member.</li>
+          <li><span class="year">2016</span> A. Carlton, M.S. — Penn State. Committee member.</li>
+          <li><span class="year">2015</span> K. Greenwald, M.S. — Hood College. Advisor.</li>
+          <li><span class="year">2013</span> D. Kammerer, M.S. — Hood College. Advisor.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="subhead">Honors Theses Supervised</h3>
+        <ul class="mentoring-list">
+          <li><span class="year">In progress</span> C. Mobley — Scale and winter bird distribution modelling in Pennsylvania</li>
+          <li><span class="year">In progress</span> M. McArthur — Small mammal monitoring, Bliss Farm Bird Improvement Area</li>
+          <li><span class="year">2024</span> J. Stergio — Efficient songbird surveys using UAS</li>
+          <li><span class="year">2022</span> Z. Hoffman — Bioacoustics and radar: nighttime migration and window collisions</li>
+          <li><span class="year">2022</span> M. Clarke — Historic redlining and urban butterfly diversity</li>
+          <li><span class="year">2021</span> L. Sherman — Depth and range estimation for beaked whales, Marianas Archipelago</li>
+          <li><span class="year">2020</span> M. Somers — Estimating songbird abundance with drones</li>
+          <li><span class="year">2019</span> J. Gilmore — Recreational boat noise and oyster larvae settlement</li>
+          <li><span class="year">2019</span> E. Porta — Riparian water politics in the Middle East</li>
+          <li><span class="year">2018</span> K. Boyle — Effects of drones on songbird behavior</li>
+          <li><span class="year">2017</span> Z. Liu — Climate vulnerability of Talamancan montane forest birds</li>
+          <li><span class="year">2016</span> R. Pruitt — Broad-winged Hawk range change and habitat fragmentation</li>
+          <li><span class="year">2016</span> M. Zagorski — Field tests of UAV avian abundance monitoring</li>
+          <li><span class="year">2015</span> J. Barr — UAV feasibility for bird surveys</li>
+          <li><span class="year">2015</span> J. Blum — Forest bird declines and hemlock woolly adelgid</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ AWARDS ════════════════════════════════════ -->
+<div id="page-awards" class="page">
+  <div class="content-wrap">
+    <div class="two-col">
+      <div>
+        <div class="section-label">Recognition</div>
+        <h2 class="section-title">Awards</h2>
+        <ul class="awards-list">
+          <li>
+            <span class="award-year">2026</span>
+            <span class="award-name">
+              <strong>Dr. Robert E. Dutton '46 Memorial Mentorship Award</strong>
+              Gettysburg College
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2023</span>
+            <span class="award-name">
+              <strong>Earle Poole Award</strong>
+              Recognizing Outstanding Contributions to Ornithology in Pennsylvania
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2013</span>
+            <span class="award-name">
+              <strong>Golden Pileated Award</strong>
+              Pennsylvania Society for Ornithology — for significantly advancing ornithological knowledge in Pennsylvania
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2008</span>
+            <span class="award-name">
+              <strong>Outstanding Graduate Student Award</strong>
+              Environment and Natural Resources Institute, Penn State
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2007</span>
+            <span class="award-name">
+              <strong>Roger M. Latham Award</strong>
+              Outstanding graduate student in Wildlife and Fisheries Science, Penn State
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2006</span>
+            <span class="award-name">
+              <strong>J. Brian Horton Memorial Award</strong>
+              Outstanding achievement and service, PSU Intercollege Graduate Program in Ecology
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2006</span>
+            <span class="award-name">
+              <strong>Outstanding Volunteer Assistant</strong>
+              United States Department of Agriculture
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="section-label">Professional &amp; College</div>
+        <h2 class="section-title">Service</h2>
+
+        <h3 class="subhead" style="font-size:1rem; margin-top:0">Gettysburg College</h3>
+        <ul class="service-list">
+          <li>Chair, Department of Environmental Studies (2024–present)</li>
+          <li>Faculty Secretary (2022–2024)</li>
+          <li>Faculty Governance Committee, chair (2018–2020)</li>
+          <li>Board member, Cross-Disciplinary Science Institute (2018–2024)</li>
+          <li>Member, Strategic Planning: Integrated Learning Committee (2021)</li>
+        </ul>
+
+        <h3 class="subhead" style="font-size:1rem">External &amp; Professional</h3>
+        <ul class="service-list">
+          <li>Chair, 3rd Pennsylvania Bird Atlas Steering Committee (2022–present)</li>
+          <li>Chair, PA Biological Survey Ornithological Technical Committee (2025–present)</li>
+          <li>President, Pennsylvania Biological Survey (2021–2023)</li>
+          <li>Member, Technical Committee, Appalachian Mountains Joint Venture (2012–present)</li>
+          <li>Member, MD &amp; DC Records Committee, Maryland Ornithological Society (2016–2019; 2023–present)</li>
+          <li>Associate Editor, <em>Bird Study</em> (2016–2021)</li>
+          <li>Manuscript reviewer for 18 journals including <em>Biological Conservation</em>, <em>The Auk</em>, <em>Ecology</em>, <em>Journal of Applied Ecology</em>, and <em>Remote Sensing in Ecology and Conservation</em></li>
+        </ul>
+
+        <h3 class="subhead" style="font-size:1rem">Grants (selected)</h3>
+        <ul class="service-list">
+          <li>PA Game Commission Cooperative Grant — $34,588 (2022)</li>
+          <li>PA Dept. of Education OER Development Grant — $15,200 (2021)</li>
+          <li>West Virginia DNR / Conservation Management Institute — $72,164 (co-PI, 2015)</li>
+          <li>Multiple Gettysburg College Research &amp; Professional Development Grants</li>
+          <li>Grants won for British Trust for Ornithology (1999–2004) — >$100,000 total</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Andrew Mark Wilson Ph.D. &nbsp;·&nbsp; Professor &amp; Chair, Environmental Studies &nbsp;·&nbsp; Gettysburg College</p>
+  <p style="margin-top:0.5rem"><a href="mailto:awilson@gettysburg.edu">awilson@gettysburg.edu</a> &nbsp;·&nbsp; <a href="https://orcid.org/0000-0001-8435-4516">ORCID</a> &nbsp;·&nbsp; <a href="https://scholar.google.com/citations?user=b9T6BYcAAAAJ&hl=en">Google Scholar</a></p>
+</footer>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const pages = ['about','research','publications','teaching','awards'];
+    const idx = pages.indexOf(id);
+    if (idx >= 0) document.querySelectorAll('nav button')[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
