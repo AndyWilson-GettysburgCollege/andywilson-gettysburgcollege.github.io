@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrew Wilson — Avian Ecologist</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1e3a2f;
+    --forest-mid: #2d5240;
+    --moss: #4a7c59;
+    --sage: #7aab84;
+    --sage-light: #b2d4b8;
+    --parchment: #f5f0e8;
+    --parchment-dark: #ede5d4;
+    --ink: #1a1a16;
+    --ink-mid: #3d3d35;
+    --ink-light: #6b6b5e;
+    --gold: #c9933a;
+    --gold-light: #e8b86d;
+    --white: #fdfcf8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lora', Georgia, serif;
+    background: var(--parchment);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  header {
+    background: var(--forest);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 64px;
+  }
+  .site-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--parchment);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .site-name span {
+    color: var(--gold-light);
+    font-style: italic;
+  }
+  nav {
+    display: flex;
+    gap: 0.2rem;
+  }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--sage-light);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.85rem;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: color 0.2s, background 0.2s;
+  }
+  nav button:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  nav button.active { color: var(--gold-light); border-bottom: 2px solid var(--gold); }
+
+  /* ── PAGES ── */
+  .page { display: none; animation: fadeIn 0.4s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── HERO (About) ── */
+  .hero {
+    background: var(--forest);
+    background-image: 
+      radial-gradient(ellipse at 80% 20%, rgba(74,124,89,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 10% 80%, rgba(201,147,58,0.15) 0%, transparent 50%);
+    padding: 5rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234a7c59' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+  }
+  .hero-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+  .hero-text .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1.8rem;
+  }
+  .hero-text p {
+    color: rgba(245,240,232,0.85);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    max-width: 580px;
+    margin-bottom: 1rem;
+  }
+  .hero-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.65rem 1.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--forest);
+    font-weight: 500;
+  }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-outline {
+    background: transparent;
+    color: var(--sage-light);
+    border: 1px solid var(--sage);
+  }
+  .btn-outline:hover { background: rgba(74,124,89,0.2); color: var(--white); }
+  .hero-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 2rem;
+    backdrop-filter: blur(4px);
+  }
+  .hero-card h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1.2rem;
+  }
+  .stat-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--white);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'Lora', serif;
+    font-size: 0.85rem;
+    color: var(--sage-light);
+    font-style: italic;
+  }
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0; }
+
+  /* ── MAIN CONTENT AREA ── */
+  .content-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--forest);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--parchment-dark);
+  }
+
+  /* ── ABOUT BIO ── */
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .bio-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+    color: var(--ink-mid);
+  }
+  .bio-text p:first-child::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    float: left;
+    line-height: 0.8;
+    margin: 0.1em 0.1em 0 0;
+    color: var(--forest);
+  }
+  .info-card {
+    background: var(--forest);
+    border-radius: 6px;
+    padding: 1.8rem;
+    align-self: start;
+  }
+  .info-card h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+  }
+  .info-card p, .info-card a {
+    color: var(--sage-light);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-decoration: none;
+  }
+  .info-card a:hover { color: var(--white); }
+  .info-card hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0; }
+
+  /* ── RESEARCH ── */
+  .research-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .research-card {
+    background: var(--white);
+    border: 1px solid var(--parchment-dark);
+    border-radius: 6px;
+    padding: 1.8rem;
+    border-left: 4px solid var(--moss);
+    transition: border-left-color 0.2s, box-shadow 0.2s;
+  }
+  .research-card:hover {
+    border-left-color: var(--gold);
+    box-shadow: 0 4px 20px rgba(30,58,47,0.1);
+  }
+  .research-card .rc-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--moss);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .research-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--forest);
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+  .research-card p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--ink-light);
+  }
+  .research-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    border-left-color: var(--gold);
+    background: var(--forest);
+  }
+  .research-card.featured .rc-num { color: var(--gold-light); }
+  .research-card.featured h3 { color: var(--white); font-size: 1.3rem; }
+  .research-card.featured p { color: var(--sage-light); }
+  .research-card.featured .rc-text { display: flex; flex-direction: column; justify-content: center; }
+
+  /* ── PUBLICATIONS ── */
+  .pub-year-group { margin-bottom: 2.5rem; }
+  .pub-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--forest);
+    border-bottom: 1px solid var(--parchment-dark);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  .pub-item {
+    padding: 0.85rem 0 0.85rem 1.2rem;
+    border-left: 2px solid var(--parchment-dark);
+    margin-bottom: 0.5rem;
+    transition: border-left-color 0.2s;
+    font-size: 0.93rem;
+    line-height: 1.65;
+    color: var(--ink-mid);
+  }
+  .pub-item:hover { border-left-color: var(--moss); }
+  .pub-item a { color: var(--moss); text-decoration: none; }
+  .pub-item a:hover { color: var(--gold); text-decoration: underline; }
+  .pub-item em { font-style: italic; }
+  .pub-item .pub-journal {
+    font-style: italic;
+    color: var(--ink-light);
+  }
+  .pub-tag {
+    display: inline-block;
+    background: var(--parchment-dark);
+    color: var(--moss);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+  .pub-tag.student { background: rgba(74,124,89,0.12); }
+
+  /* ── TEACHING ── */
+  .teaching-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2.5rem;
+  }
+  .course-list { list-style: none; }
+  .course-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--parchment-dark);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: var(--ink-mid);
+  }
+  .course-list li:last-child { border-bottom: none; }
+  .course-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--moss);
+    letter-spacing: 0.06em;
+    min-width: 60px;
+  }
+  .mentoring-list { list-style: none; }
+  .mentoring-list li {
+    padding: 0.6rem 0 0.6rem 1rem;
+    border-left: 2px solid var(--parchment-dark);
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--ink-mid);
+    line-height: 1.5;
+    transition: border-left-color 0.2s;
+  }
+  .mentoring-list li:hover { border-left-color: var(--moss); }
+  .mentoring-list li .year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--ink-light);
+  }
+
+  /* ── AWARDS / CV ── */
+  .awards-list { list-style: none; margin-bottom: 3rem; }
+  .awards-list li {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--parchment-dark);
+    align-items: baseline;
+  }
+  .award-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    min-width: 50px;
+  }
+  .award-name {
+    font-size: 0.95rem;
+    color: var(--ink-mid);
+    line-height: 1.5;
+  }
+  .award-name strong {
+    display: block;
+    color: var(--forest);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* ── SERVICE ── */
+  .service-list { list-style: none; }
+  .service-list li {
+    padding: 0.5rem 0 0.5rem 1rem;
+    border-left: 2px solid var(--parchment-dark);
+    margin-bottom: 0.35rem;
+    font-size: 0.92rem;
+    color: var(--ink-mid);
+    line-height: 1.55;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--forest);
+    color: var(--sage-light);
+    text-align: center;
+    padding: 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    margin-top: 4rem;
+    border-top: 3px solid var(--gold);
+  }
+  footer a { color: var(--gold-light); text-decoration: none; }
+
+  /* ── UTILITIES ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .subhead {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--forest);
+    margin: 2rem 0 1rem;
+    font-style: italic;
+  }
+  .orcid-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--moss);
+    text-decoration: none;
+  }
+  .orcid-link:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-card { display: none; }
+    .hero-text h1 { font-size: 2.2rem; }
+    .bio-grid, .research-grid, .teaching-grid, .two-col { grid-template-columns: 1fr; }
+    .research-card.featured { grid-template-columns: 1fr; }
+    nav button { font-size: 0.65rem; padding: 0.4rem 0.55rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="site-name" onclick="showPage('about')">Andrew M. Wilson <span>Ph.D.</span></div>
+    <nav>
+      <button class="active" onclick="showPage('about')">About</button>
+      <button onclick="showPage('research')">Research</button>
+      <button onclick="showPage('publications')">Publications</button>
+      <button onclick="showPage('teaching')">Teaching</button>
+      <button onclick="showPage('awards')">Awards & Service</button>
+      <button onclick="showPage('art')">Art & Photography</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════ ABOUT ════════════════════════════════════ -->
+<div id="page-about" class="page active">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="subtitle">Professor &amp; Chair · Environmental Studies · Gettysburg College</div>
+        <h1>Andrew Mark Wilson</h1>
+        <p>Avian ecologist studying the effects of land use and climate change on bird populations, with a specialization in drone-based wildlife survey methods and large-scale biodiversity datasets.</p>
+        <p>Current Chair of the <strong style="color:var(--sage-light)">Third Pennsylvania Bird Atlas</strong> Steering Committee and Chair of the Department of Environmental Studies at Gettysburg College.</p>
+        <div class="hero-links">
+          <a href="https://drive.google.com/file/d/1sGyFfxe8QR6tUGTJdh-BJVIdBTiHVa5O/view?usp=sharing" class="btn btn-gold" target="_blank">Download CV</a>
+          <a href="https://scholar.google.com/citations?user=b9T6BYcAAAAJ&hl=en" class="btn btn-outline" target="_blank">Google Scholar</a>
+          <a href="https://orcid.org/0000-0001-8435-4516" class="btn btn-outline" target="_blank">ORCID</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>Research at a glance</h3>
+        <div class="stat-row">
+          <div class="stat">
+            <span class="stat-num">40+</span>
+            <span class="stat-label">peer-reviewed publications</span>
+          </div>
+          <hr class="divider">
+          <div class="stat">
+            <span class="stat-num">30+</span>
+            <span class="stat-label">years in avian ecology</span>
+          </div>
+          <hr class="divider">
+          <div class="stat">
+            <span class="stat-num">15+</span>
+            <span class="stat-label">honors theses supervised</span>
+          </div>
+          <hr class="divider">
+          <div class="stat">
+            <span class="stat-num">3rd</span>
+            <span class="stat-label">PA Bird Atlas — steering chair</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+    <div class="bio-grid">
+      <div class="bio-text">
+        <p>
+          After graduating with a BSc in Applied Statistics from Sheffield Hallam University (1992), I began my career working for two years in health economics research at the University of York, before joining the <strong><a href="https://www.bto.org/" target="_blank" style="color:inherit;">British Trust for Ornithology</a></strong> in 1994—where I spent a productive decade combining quantitative skills with a lifelong passion for birds and conservation. My work at the BTO focused on the population ecology of farmland birds across the UK, producing foundational studies on lapwing, wader, and grassland bird declines.
+        </p>
+        <p>
+          In 2004 I moved to the US to pursue a PhD in Ecology at Penn State, where my research examined bird population responses to conservation grasslands in Pennsylvania. Concurrent with graduate study, I spent six field seasons contributing to the <strong><a href="https://www.psupress.org/books/titles/978-0-271-05630-2.html" target="_blank" style="color:inherit;">Second Pennsylvania Breeding Bird Atlas</a></strong> and ultimately served as lead editor of the resulting 612-page volume published by Penn State University Press in 2012.
+        </p>
+        <p>
+          Following a postdoctoral fellowship at the US Geological Survey at Patuxent, I joined the faculty at <strong><a href="https://www.gettysburg.edu/academics/environmental-studies/" target="_blank" style="color:inherit;">Gettysburg College</a></strong> in 2011, where I have built a research program around three themes: the ecology and conservation of bird populations at landscape and regional scales; the development of <strong>drone-based survey methods</strong> for wildlife monitoring; and the analysis of large citizen-science datasets including breeding bird atlases and camera trap networks. I am currently a Professor and Chair of the Department of Environmental Studies, and Chair of the Third Pennsylvania Bird Atlas Steering Committee.
+        </p>
+        <p>
+          A central feature of my work at Gettysburg is deep engagement with undergraduate researchers. More than fifteen students have completed honors theses under my supervision, co-authoring papers published in outlets including <em>The Auk</em>, <em>Drones</em>, and <em>Neotropical Biodiversity</em>.
+        </p>
+      </div>
+      <div>
+        <div class="info-card">
+          <h4>Contact</h4>
+          <p>Department of Environmental Studies<br>
+          Gettysburg College, Box 2455<br>
+          300 N. Washington St.<br>
+          Gettysburg, PA 17325 USA</p>
+          <hr>
+          <p>Tel: (717) 337 6072</p>
+          <p><a href="mailto:awilson@gettysburg.edu">awilson@gettysburg.edu</a></p>
+          <hr>
+          <p style="margin-bottom:0.5rem"><a href="https://orcid.org/0000-0001-8435-4516">ORCID: 0000-0001-8435-4516</a></p>
+          <p><a href="https://scholar.google.com/citations?user=b9T6BYcAAAAJ&hl=en">Google Scholar profile →</a></p>
+        </div>
+
+        <div class="info-card" style="margin-top:1rem; background: var(--forest-mid);">
+          <h4>Education</h4>
+          <p><strong style="color:var(--white)">Ph.D. Ecology</strong><br>Pennsylvania State University, 2009</p>
+          <hr>
+          <p><strong style="color:var(--white)">BSc Applied Statistics</strong> (with honours)<br>Sheffield Hallam University, UK, 1992</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ RESEARCH ════════════════════════════════════ -->
+<div id="page-research" class="page">
+  <div class="content-wrap">
+    <div class="section-label">Ongoing & Recent Work</div>
+    <h2 class="section-title">Research</h2>
+
+    <div class="research-grid">
+
+      <div class="research-card featured">
+        <div class="rc-text">
+          <div class="rc-num">Flagship Initiative</div>
+          <h3><a href="https://pabirdsatlas.org" target="_blank" style="color:inherit; text-decoration:none;">Third Pennsylvania Bird Atlas</a></h3>
+          <p>As Chair of the Steering Committee, I am leading the planning and execution of the Third Pennsylvania Bird Atlas — a statewide coordinated survey that will document the current distribution and abundance of all breeding and wintering bird species across the Commonwealth. Building on the Second Atlas (2004–2009), the third iteration incorporates eBird-integrated data submission, advanced occupancy modelling, and the largest volunteer coordination effort in Pennsylvania ornithological history.</p>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:center;">
+          <a href="https://pabirdsatlas.org" target="_blank">
+            <img src="CombinedLogo_Mark.png" alt="Third Pennsylvania Bird Atlas logo" style="width:200px; height:auto; filter:drop-shadow(0 2px 12px rgba(0,0,0,0.4));">
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Active Research</div>
+        <h3>Drone-Based Bioacoustic Bird Surveys</h3>
+        <p>My lab has developed and refined methods for estimating songbird abundance using unoccupied aircraft systems (UAS) equipped with passive acoustic recorders. Recent work demonstrates high efficiency compared to traditional point counts, and ongoing projects are optimizing detector placement, flight altitude, and automated species identification to make drone surveys a practical tool for large-scale monitoring.</p>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Active Research</div>
+        <h3>Nocturnal Bird Migration Monitoring</h3>
+        <p>Using a combination of audio recording of flight calls and weather surveillance radar, I am investigating the timing, intensity, and composition of nocturnal bird migration over central Maryland and Pennsylvania. This work addresses fundamental questions about migration phenology and its relationship to weather, season, and broader population trends.</p>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Active Research</div>
+        <h3>Large-Scale Biodiversity Datasets</h3>
+        <p>I contribute to several national-scale collaborative efforts including the SNAPSHOT USA camera trap network (coordinated surveys of US mammal communities since 2019) and continue analyses of breeding bird atlas and eBird datasets to examine how land use, urbanization, and climate change drive changes in bird community composition across the eastern US.</p>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Recent Work</div>
+        <h3>Climate Change &amp; Montane Forest Birds</h3>
+        <p>Collaborative work with students examined the vulnerability of elevation-restricted endemic birds of the Talamancan Montane Forests (Costa Rica and Panama) to climate change, using species distribution modelling to project range losses under future warming scenarios.</p>
+      </div>
+
+      <div class="research-card">
+        <div class="rc-num">Recent Work</div>
+        <h3>Invasive Species &amp; Forest Bird Communities</h3>
+        <p>In collaboration with Penn State researchers, we quantified the regional-scale impacts of hemlock woolly adelgid (<em>Adelges tsugae</em>) invasion on North American forest bird communities, linking hemlock decline detected in remote sensing data to long-term changes in bird occupancy derived from atlas datasets.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ PUBLICATIONS ════════════════════════════════════ -->
+<div id="page-publications" class="page">
+  <div class="content-wrap">
+    <div class="section-label">Peer-Reviewed Articles, Books &amp; Chapters</div>
+    <h2 class="section-title">Publications</h2>
+    <p style="font-size:0.88rem; color:var(--ink-light); margin-bottom:2rem; font-style:italic;">* denotes co-authored with Gettysburg College students &nbsp;|&nbsp; <a href="https://scholar.google.com/citations?user=b9T6BYcAAAAJ&hl=en" style="color:var(--moss);">Full list on Google Scholar →</a></p>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2025</div>
+      <div class="pub-item">Rooney, B. et al. 2025. SNAPSHOT USA 2019–2023: The First Five Years of Data From a Coordinated Camera Trap Survey of the United States. <span class="pub-journal">Global Ecology and Biogeography</span> 34: e13941. <a href="https://doi.org/10.1111/geb.13941" target="_blank">DOI →</a></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2024</div>
+      <div class="pub-item">Kays, R. et al. 2024. Climate, food and humans predict communities of mammals in the United States. <span class="pub-journal">Diversity and Distributions</span> 30: e13900. <a href="https://doi.org/10.1111/ddi.13900" target="_blank">DOI →</a></div>
+      <div class="pub-item">Shamon, H. et al. 2024. SNAPSHOT USA 2021: A third coordinated national camera trap survey of the United States. <span class="pub-journal">Ecology</span>. <a href="https://doi.org/10.1002/ecy.4318" target="_blank">DOI →</a></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2023</div>
+      <div class="pub-item">*Liu, Z., L. Sandoval, L.B. Sherman, and A.M. Wilson. 2023. Vulnerability of Elevation-Restricted Endemic Birds of the Talamancan Montane Forests (Costa Rica and Panama) to Climate Change. <span class="pub-journal">Neotropical Biodiversity</span> 9: 115–127. <span class="pub-tag student">Student co-authors</span></div>
+      <div class="pub-item">*Amaral, M.R., A.M. Wilson, J. Blum, and D.A. Miller. 2023. Quantifying regional-scale impacts of hemlock woolly adelgid invasion on North American forest bird communities. <span class="pub-journal">Biological Invasions</span> 25: 4009–4025. <span class="pub-tag student">Student co-authors</span></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2022</div>
+      <div class="pub-item">Kays, R. et al. 2022. SNAPSHOT USA 2020: A second coordinated national camera trap survey of the United States during the COVID-19 Pandemic. <span class="pub-journal">Ecology</span> 103: e3775.</div>
+      <div class="pub-item">Wilson, A.M. 2022. Nocturnal Bird Migration over Frederick, Maryland, Spring and Fall 2021. <span class="pub-journal">Maryland Birdlife</span> 71(2): 37–61.</div>
+      <div class="pub-item">*Wilson, A.M., D.B. Glass, M.A. Immordino, P.S. Ozoh, L.B. Sherman, and M.D. Somers. 2022. A method for estimating songbird abundance with drones. <span class="pub-journal">Drone Systems and Applications</span> 10(1). <span class="pub-tag student">Student co-authors</span></div>
+      <div class="pub-item">Ankori-Karlinsky, R., et al. 2022. North American Breeding Bird Survey underestimates regional bird richness compared to Breeding Bird Atlases. <span class="pub-journal">Ecosphere</span> 13: e3925.</div>
+      <div class="pub-item">*Wilson, A.M., K.S. Boyle, J.L. Gilmore, C.J. Kiefer, M.F. Walker. 2021. Species-Specific Responses of Bird Song Output in the Presence of Drones. <span class="pub-journal">Drones</span> 6(1). <span class="pub-tag student">Student co-authors</span></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2021</div>
+      <div class="pub-item">Wilson, A.M. 2021. Chapter 5: Analytical Methods, in <em>The Second Atlas of Breeding Birds in West Virginia</em>. Penn State Press.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2019</div>
+      <div class="pub-item">Paton G.D., A.V. Shoffner, A.M. Wilson, S.A. Gagné. 2019. The traits that predict the magnitude and spatial scale of forest bird responses to urbanization intensity. <span class="pub-journal">PLoS ONE</span> 14(7): e0220120.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2018</div>
+      <div class="pub-item">Shoffner, A., A.M. Wilson, W. Tang and S.A. Gagné. 2018. The relative effects of forest amount, forest configuration, and urban matrix quality on forest breeding birds. <span class="pub-journal">Scientific Reports</span> 8: 17140.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2017</div>
+      <div class="pub-item">Wilson, A.M., D.W. Brauning, C. Carey, R.S. Mulvihill. 2017. Spatial Models to Account for Variation in Observer Effort in Bird Atlases. <span class="pub-journal">Ecology and Evolution</span>. DOI: 10.1002/ece3.3201</div>
+      <div class="pub-item">Stauffer, G., A.M. Wilson, M. Brittingham, D.W. Brauning, and D. Miller. 2017. Stewardship responsibility of public and private lands for songbird conservation. <span class="pub-journal">Biological Conservation</span> 213: 185–193.</div>
+      <div class="pub-item">*Wilson, A.M., J. Barr, and M. Zagorski. 2017. The feasibility of counting songbirds using unmanned aerial vehicles. <span class="pub-journal">The Auk</span> 134(2): 350–362. <span class="pub-tag student">Student co-authors</span></div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2015–2016</div>
+      <div class="pub-item">Tavernia, B.G. et al. 2015. An Evaluation of Rapid Methods for Monitoring Vegetation Characteristics of Wetland Bird Habitat. <span class="pub-journal">Wetlands Ecology and Management</span> 24: 495–505.</div>
+      <div class="pub-item">Pabian, S.E., A.M. Wilson, S.R. Klinger, and M.C. Brittingham. 2015. Pennsylvania's Conservation Reserve Enhancement Program benefits ring-necked pheasants but not enough to reverse declines. <span class="pub-journal">Journal of Wildlife Management</span>.</div>
+      <div class="pub-item">van der Hoek, Y., A. Wilson, et al. 2015. Regional variability in extinction thresholds for forest birds in the northeastern United States. <span class="pub-journal">Diversity and Distributions</span> 21(6): 686–697.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">2012</div>
+      <div class="pub-item">Wilson, A.M., D.W. Brauning and R.S. Mulvihill (eds). 2012. <em>Second Atlas of Breeding Birds in Pennsylvania.</em> Penn State Press, University Park, PA. <span class="pub-tag">Book</span></div>
+      <div class="pub-item">Wilson, A.M., and M. Brittingham. 2012. Initial response of bird populations to conservation grasslands in southern Pennsylvania. <span class="pub-journal">Journal of Soil and Water Conservation</span> 67(1): 59–67.</div>
+    </div>
+
+    <div class="pub-year-group">
+      <div class="pub-year">Pre-2012 (selected)</div>
+      <div class="pub-item">Wilson, A.M., M. Brittingham, and G. Grove. 2010. Association of wintering raptors with Conservation Reserve Enhancement Program grasslands in Pennsylvania. <span class="pub-journal">Journal of Field Ornithology</span> 81: 361–372.</div>
+      <div class="pub-item">Gillings, S., A.M. Wilson, G.J. Conway, J.A. Vickery, and R.J. Fuller. 2008. Distribution and abundance of birds and their habitats within the lowland farmland of Britain in winter. <span class="pub-journal">Bird Study</span> 55: 8–22.</div>
+      <div class="pub-item">Wilson, A.M., J.A. Vickery, and C. Pendlebury. 2007. Agri-environment schemes as a tool for reversing declining populations of grassland waders. <span class="pub-journal">Biological Conservation</span> 136: 128–135.</div>
+      <div class="pub-item">Wilson, A.M., R.J. Fuller, C. Day, and G. Smith. 2005. Nightingales in scrub habitats in the southern fens of East Anglia, England. <span class="pub-journal">Ibis</span> 147: 498–511.</div>
+      <div class="pub-item">Wilson, A.M., J.A. Vickery, A. Brown, et al. 2005. Changes in the numbers of breeding waders on lowland wet grasslands in England and Wales between 1982 and 2002. <span class="pub-journal">Bird Study</span> 52: 55–69.</div>
+      <div class="pub-item">Wilson, A.M., M. Ausden, and T.P. Milsom. 2004. Changes in breeding wader populations on lowland wet grasslands in England and Wales. <span class="pub-journal">Ibis</span> 146: 32–40.</div>
+      <div class="pub-item">Wilson, A.M., A.C.B. Henderson, and R.J. Fuller. 2002. Status of the Nightingale in Britain at the end of the 20th Century with particular reference to climate change. <span class="pub-journal">Bird Study</span> 49: 193–204.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ TEACHING ════════════════════════════════════ -->
+<div id="page-teaching" class="page">
+  <div class="content-wrap">
+    <div class="section-label">Gettysburg College</div>
+    <h2 class="section-title">Teaching &amp; Mentoring</h2>
+
+    <div class="teaching-grid">
+      <div>
+        <h3 class="subhead">Courses Taught</h3>
+        <ul class="course-list">
+          <li><span class="course-code">ES 121</span> Environmental Issues</li>
+          <li><span class="course-code">ES 196</span> Environmental Science and Society</li>
+          <li><span class="course-code">ES 211</span> Principles of Ecology</li>
+          <li><span class="course-code">ES 230</span> Introduction to Geographic Information Systems</li>
+          <li><span class="course-code">ES 302</span> Wildlife Ecology</li>
+          <li><span class="course-code">ES 304</span> Landscape Ecology</li>
+          <li><span class="course-code">Bio/ES 316</span> Conservation Biology</li>
+          <li><span class="course-code">ES 391</span> Marine Ecology and Conservation</li>
+          <li><span class="course-code">ES 400</span> Environmental Studies Senior Seminar: The Appalachian Environment</li>
+        </ul>
+
+        <h3 class="subhead" style="margin-top:2rem">Graduate Students (other institutions)</h3>
+        <ul class="mentoring-list">
+          <li><span class="year">2023</span> Sarah Fischer, Ph.D. — Charles Darwin University, Australia. External examiner.</li>
+          <li><span class="year">2022</span> B. Rodrigues Do Amaral, M.S. — Penn State. Committee member.</li>
+          <li><span class="year">2021</span> M. Bolcar, M.S. — Hood College. Advisor.</li>
+          <li><span class="year">2018</span> G. Paton, M.S. — UNC Charlotte. Committee member.</li>
+          <li><span class="year">2016</span> A. Shoffner, M.S. — UNC Charlotte. Committee member.</li>
+          <li><span class="year">2016</span> A. Carlton, M.S. — Penn State. Committee member.</li>
+          <li><span class="year">2015</span> K. Greenwald, M.S. — Hood College. Advisor.</li>
+          <li><span class="year">2013</span> D. Kammerer, M.S. — Hood College. Advisor.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="subhead">Honors Theses Supervised</h3>
+        <ul class="mentoring-list">
+          <li><span class="year">In progress</span> C. Mobley — Scale and winter bird distribution modelling in Pennsylvania</li>
+          <li><span class="year">In progress</span> M. McArthur — Small mammal monitoring, Bliss Farm Bird Improvement Area</li>
+          <li><span class="year">2024</span> J. Stergio — Efficient songbird surveys using UAS</li>
+          <li><span class="year">2022</span> Z. Hoffman — Bioacoustics and radar: nighttime migration and window collisions</li>
+          <li><span class="year">2022</span> M. Clarke — Historic redlining and urban butterfly diversity</li>
+          <li><span class="year">2021</span> L. Sherman — Depth and range estimation for beaked whales, Marianas Archipelago</li>
+          <li><span class="year">2020</span> M. Somers — Estimating songbird abundance with drones</li>
+          <li><span class="year">2019</span> J. Gilmore — Recreational boat noise and oyster larvae settlement</li>
+          <li><span class="year">2019</span> E. Porta — Riparian water politics in the Middle East</li>
+          <li><span class="year">2018</span> K. Boyle — Effects of drones on songbird behavior</li>
+          <li><span class="year">2017</span> Z. Liu — Climate vulnerability of Talamancan montane forest birds</li>
+          <li><span class="year">2016</span> R. Pruitt — Broad-winged Hawk range change and habitat fragmentation</li>
+          <li><span class="year">2016</span> M. Zagorski — Field tests of UAV avian abundance monitoring</li>
+          <li><span class="year">2015</span> J. Barr — UAV feasibility for bird surveys</li>
+          <li><span class="year">2015</span> J. Blum — Forest bird declines and hemlock woolly adelgid</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ AWARDS ════════════════════════════════════ -->
+<div id="page-awards" class="page">
+  <div class="content-wrap">
+    <div class="two-col">
+      <div>
+        <div class="section-label">Recognition</div>
+        <h2 class="section-title">Awards</h2>
+        <ul class="awards-list">
+          <li>
+            <span class="award-year">2026</span>
+            <span class="award-name">
+              <strong>Dr. Robert E. Dutton '46 Memorial Mentorship Award</strong>
+              Gettysburg College
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2023</span>
+            <span class="award-name">
+              <strong>Earle Poole Award</strong>
+              Recognizing Outstanding Contributions to Ornithology in Pennsylvania
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2013</span>
+            <span class="award-name">
+              <strong>Golden Pileated Award</strong>
+              Pennsylvania Society for Ornithology — for significantly advancing ornithological knowledge in Pennsylvania
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2008</span>
+            <span class="award-name">
+              <strong>Outstanding Graduate Student Award</strong>
+              Environment and Natural Resources Institute, Penn State
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2007</span>
+            <span class="award-name">
+              <strong>Roger M. Latham Award</strong>
+              Outstanding graduate student in Wildlife and Fisheries Science, Penn State
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2006</span>
+            <span class="award-name">
+              <strong>J. Brian Horton Memorial Award</strong>
+              Outstanding achievement and service, PSU Intercollege Graduate Program in Ecology
+            </span>
+          </li>
+          <li>
+            <span class="award-year">2006</span>
+            <span class="award-name">
+              <strong>Outstanding Volunteer Assistant</strong>
+              United States Department of Agriculture
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="section-label">Professional &amp; College</div>
+        <h2 class="section-title">Service</h2>
+
+        <h3 class="subhead" style="font-size:1rem; margin-top:0">Gettysburg College</h3>
+        <ul class="service-list">
+          <li>Chair, Department of Environmental Studies (2024–present)</li>
+          <li>Faculty Secretary (2022–2024)</li>
+          <li>Faculty Governance Committee, chair (2018–2020)</li>
+          <li>Board member, Cross-Disciplinary Science Institute (2018–2024)</li>
+          <li>Member, Strategic Planning: Integrated Learning Committee (2021)</li>
+        </ul>
+
+        <h3 class="subhead" style="font-size:1rem">External &amp; Professional</h3>
+        <ul class="service-list">
+          <li>Chair, 3rd Pennsylvania Bird Atlas Steering Committee (2022–present)</li>
+          <li>Chair, PA Biological Survey Ornithological Technical Committee (2025–present)</li>
+          <li>President, Pennsylvania Biological Survey (2021–2023)</li>
+          <li>Member, Technical Committee, Appalachian Mountains Joint Venture (2012–present)</li>
+          <li>Member, MD &amp; DC Records Committee, Maryland Ornithological Society (2016–2019; 2023–present)</li>
+          <li>Associate Editor, <em>Bird Study</em> (2016–2021)</li>
+          <li>Manuscript reviewer for 18 journals including <em>Biological Conservation</em>, <em>The Auk</em>, <em>Ecology</em>, <em>Journal of Applied Ecology</em>, and <em>Remote Sensing in Ecology and Conservation</em></li>
+        </ul>
+
+        <h3 class="subhead" style="font-size:1rem">Grants (selected)</h3>
+        <ul class="service-list">
+          <li>PA Game Commission Cooperative Grant — $34,588 (2022)</li>
+          <li>PA Dept. of Education OER Development Grant — $15,200 (2021)</li>
+          <li>West Virginia DNR / Conservation Management Institute — $72,164 (co-PI, 2015)</li>
+          <li>Multiple Gettysburg College Research &amp; Professional Development Grants</li>
+          <li>Grants won for British Trust for Ornithology (1999–2004) — >$100,000 total</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ ART & PHOTOGRAPHY ════════════════════════════════════ -->
+<div id="page-art" class="page">
+  <div class="content-wrap">
+    <div class="section-label">Beyond the Field Notes</div>
+    <h2 class="section-title">Art &amp; Photography</h2>
+    <p style="font-size:1rem; line-height:1.8; color:var(--ink-mid); max-width:700px; margin-bottom:3rem;">
+      The same close observation that drives my scientific work also finds expression in visual art — from vector silhouettes used in scientific publications worldwide, to digital painting and field photography of birds across two continents.
+    </p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:3rem;">
+
+      <div style="background:var(--white); border:1px solid var(--parchment-dark); border-radius:8px; overflow:hidden; display:flex; flex-direction:column;">
+        <div style="overflow:hidden; height:280px;">
+          <img src="data:image/jpeg;base64,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weXfqBhhth4bbwOD9p9+MoLLOVnxOWZtvIxjGMYqW23nIILLLLLIILLLLLLP4NttmbbbvXkEQIhSEIEHDZeB5TPZuh7zIEoRhMj3Wb8+fiwOGtMCA/lPwb27d/7JjBv3PcOdz3XfK994DXPEa5T3vlfnj3CF82of872djLLLLILImQWWWWWSSSSSWWWWWWRxttttsNsTbYfs+8ETM4W2Y8qfEvQFlllllvrxnGcCEIFllnAIOQOTLLLOnbbbbecssss5CEKUhDkZxtt3lyX9ns3mR/qHOdzJD6l7dnzFRZ8kXtr3Tz3e/vj4prvl2nIv5928KsUPEQgv02z5BP1Mf9ssssiBBa6x2ta16/GdG222228bfofnDnK8va150tvG2y9CWcNchwEIcGcmcmWWWWWWWWWdG87ZBBEOgNRSlOIgQWWdDNg2Cv3zH/TnEiPCsEHn4+egPhf5zuv3eD6XbyXefU3/AGZlkQh/CB2ta16HYxiSWWdJwcfvPv0A9ALWMXbbenLLLLLLOQhDgCyyyyyzgP4HneN5yCCCCORnAIILOgcZwklll2j+p/x/7zvcjaNrGnznRqhDgfV7HO654Tw9l/2yyCITImWWWWWTMySWSHKWSSSSWWWWWdLD9Tv6A1rzll6M5yyyyyyyOQcjLOTp2222222222223jLIIIINggss4yOG222ww85JZZZeZT/pa/7z336zxqCTO3yb4PXR71zfn5km7kX7878Dv17fjPP97ZZZBB0bbY6C1qOR+EtsstvOWWWWWWdH7Z7dGZrx35yyyyyzjOTgFlllkFlnS2222222222222223kLIIIIgRwW8bbw221th5Ass4NsbnxPv/wDhw0EcYR+gRNBB3gfV+Xy+t8dGndad7csAk0nrfXHvkX86J/yZlmRbbMejHp88b08W2223ozq/efK2Ocsssgks5223oIjgcjbbLLLbbbbbxtttttvO8hBZBZBsEHBbbbba2228EEEEEcLLMYH/AO5aLvme7t6jqvszfo9gGJMhG8xQ0HdPo16G8hblme/NndPPa3jL+675Ax/T/wBmJMsxjWtf4RY8jbbYeN6sssssv3ny5zjLOhltttttttthhttttttttllttttttt/iyCCOgSG2222223giCCIQIItmMa140f8AX/G9v8sqCyu5iF27PI+Y/I6ciPsTs9Hn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" alt="Backlit bird — digital painting by Andy Wilson" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.4s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+        <div style="padding:1.5rem 1.8rem; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--moss); margin-bottom:0.5rem;">Digital Painting</div>
+            <h3 style="font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--forest); margin-bottom:0.7rem;">Backlit Bird — Digital Art Portfolio</h3>
+            <p style="font-size:0.9rem; line-height:1.65; color:var(--ink-light);">Digital artwork combining scientific accuracy with artistic interpretation, featuring birds in natural settings rendered in a painterly style with close attention to plumage, structure, and light.</p>
+          </div>
+          <a href="https://andywilson.portfoliobox.net/" target="_blank" class="btn btn-gold" style="margin-top:1.2rem; text-align:center; display:block;">Visit Full Portfolio &rarr;</a>
+        </div>
+      </div>
+
+      <div style="background:var(--forest); border-radius:8px; overflow:hidden; display:flex; flex-direction:column;">
+        <div style="overflow:hidden; height:280px;">
+          <img src="https://cdn.download.ams.birds.cornell.edu/api/v2/asset/612452961/1200" alt="Winter Wren — photo by Andy Wilson, Macaulay Library ML612452961" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.4s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+        <div style="padding:1.5rem 1.8rem; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold-light); margin-bottom:0.5rem;">Field Photography &middot; Macaulay Library</div>
+            <h3 style="font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--white); margin-bottom:0.7rem; font-style:italic;">Winter Wren <span style="font-style:normal; font-size:0.95rem; color:var(--sage-light);">Troglodytes hiemalis</span></h3>
+            <p style="font-size:0.9rem; line-height:1.65; color:var(--sage-light);">Buckeystown Community Park, Frederick, Maryland &middot; 20 Dec 2023. Canon EOS R5, RF800mm f/11 IS STM. Contributed to the Cornell Lab of Ornithology's Macaulay Library.</p>
+          </div>
+          <a href="https://media.ebird.org/catalog?birdOnly=true&mediaType=photo&userId=USER43068&sort=rating_rank_desc" target="_blank" class="btn btn-outline" style="margin-top:1.2rem; text-align:center; display:block;">Browse Top-Rated Photos &rarr;</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-bottom:2rem;">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.2rem;">
+        <div>
+          <div class="section-label" style="margin-bottom:0.2rem;">Open-Access Silhouette Art</div>
+          <h3 style="font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--forest);">548 Silhouettes on PhyloPic</h3>
+        </div>
+        <a href="https://www.phylopic.org/contributors/c3ac6939-e85a-4a10-99d1-4079537f34de/andy-wilson-silhouettes" target="_blank" class="btn btn-gold">View All Silhouettes &rarr;</a>
+      </div>
+      <p style="font-size:0.9rem; line-height:1.7; color:var(--ink-light); max-width:700px; margin-bottom:1.5rem;">Vector silhouettes contributed to <a href="https://www.phylopic.org" target="_blank" style="color:var(--moss);">PhyloPic</a> — the open database of life silhouettes used in scientific publications, textbooks, and educational materials worldwide. All freely available under Creative Commons licensing. Click any image to view on PhyloPic.</p>
+
+      <div style="display:grid; grid-template-columns:repeat(8,1fr); gap:0.6rem;">
+        <a href="https://www.phylopic.org/images/90f8327c-3cfd-4497-8c27-197542421b19" target="_blank" title="Northern Harrier" style="background:var(--forest); border-radius:4px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest)'"><img src="https://images.phylopic.org/images/90f8327c-3cfd-4497-8c27-197542421b19/thumbnail/128x128.png" alt="Northern Harrier" style="width:80%; height:80%; object-fit:contain; filter:invert(1) opacity(0.85);"></a>
+        <a href="https://www.phylopic.org/images/3f76e209-8ac4-4e4b-aec2-b8a62d1a7ce0" target="_blank" title="Canada Jay" style="background:var(--forest); border-radius:4px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest)'"><img src="https://images.phylopic.org/images/3f76e209-8ac4-4e4b-aec2-b8a62d1a7ce0/thumbnail/128x128.png" alt="Canada Jay" style="width:80%; height:80%; object-fit:contain; filter:invert(1) opacity(0.85);"></a>
+        <a href="https://www.phylopic.org/images/63457cae-d0e8-48f9-82e2-869c45034f90" target="_blank" title="Cooper's Hawk" style="background:var(--forest); border-radius:4px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest)'"><img src="https://images.phylopic.org/images/63457cae-d0e8-48f9-82e2-869c45034f90/thumbnail/128x128.png" alt="Cooper's Hawk" style="width:80%; height:80%; object-fit:contain; filter:invert(1) opacity(0.85);"></a>
+        <a href="https://www.phylopic.org/images/6fdb3ece-9147-4300-b477-5596bc2fd677" target="_blank" title="Upland Sandpiper" style="background:var(--forest); border-radius:4px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest)'"><img src="https://images.phylopic.org/images/6fdb3ece-9147-4300-b477-5596bc2fd677/thumbnail/128x128.png" alt="Upland Sandpiper" style="width:80%; height:80%; object-fit:contain; filter:invert(1) opacity(0.85);"></a>
+        <a href="https://www.phylopic.org/images/b22701ca-d000-4ca4-aa96-b497b15f6f83" target="_blank" title="Magnificent Frigatebird" style="background:var(--forest); border-radius:4px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest)'"><img src="https://images.phylopic.org/images/b22701ca-d000-4ca4-aa96-b497b15f6f83/thumbnail/128x128.png" alt="Magnificent Frigatebird" style="width:80%; height:80%; object-fit:contain; filter:invert(1) opacity(0.85);"></a>
+        <a href="https://www.phylopic.org/images/4bba4e4c-c313-4e35-b55c-a69bd67b7c96" target="_blank" title="Wild Turkey" style="background:var(--forest); border-radius:4px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest)'"><img src="https://images.phylopic.org/images/4bba4e4c-c313-4e35-b55c-a69bd67b7c96/thumbnail/128x128.png" alt="Wild Turkey" style="width:80%; height:80%; object-fit:contain; filter:invert(1) opacity(0.85);"></a>
+        <a href="https://www.phylopic.org/images/1a0320d5-2384-40f4-943a-111273db93b6" target="_blank" title="Laughing Kookaburra" style="background:var(--forest); border-radius:4px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest)'"><img src="https://images.phylopic.org/images/1a0320d5-2384-40f4-943a-111273db93b6/thumbnail/128x128.png" alt="Laughing Kookaburra" style="width:80%; height:80%; object-fit:contain; filter:invert(1) opacity(0.85);"></a>
+        <a href="https://www.phylopic.org/images/ca42294f-afc5-40a0-b14b-fd81c5b5557d" target="_blank" title="Eurasian Collared-Dove" style="background:var(--forest); border-radius:4px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='var(--forest-mid)'" onmouseout="this.style.background='var(--forest)'"><img src="https://images.phylopic.org/images/ca42294f-afc5-40a0-b14b-fd81c5b5557d/thumbnail/128x128.png" alt="Eurasian Collared-Dove" style="width:80%; height:80%; object-fit:contain; filter:invert(1) opacity(0.85);"></a>
+      </div>
+      <p style="font-size:0.78rem; color:var(--ink-light); margin-top:0.6rem; font-style:italic;">8 of 548 contributed silhouettes — hover for species name, click to view on PhyloPic.</p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>Andrew Mark Wilson Ph.D. &nbsp;·&nbsp; Professor &amp; Chair, Environmental Studies &nbsp;·&nbsp; Gettysburg College</p>
+  <p style="margin-top:0.5rem"><a href="mailto:awilson@gettysburg.edu">awilson@gettysburg.edu</a> &nbsp;·&nbsp; <a href="https://orcid.org/0000-0001-8435-4516">ORCID</a> &nbsp;·&nbsp; <a href="https://scholar.google.com/citations?user=b9T6BYcAAAAJ&hl=en">Google Scholar</a></p>
+</footer>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const pages = ['about','research','publications','teaching','awards','art'];
+    const idx = pages.indexOf(id);
+    if (idx >= 0) document.querySelectorAll('nav button')[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
